@@ -1,0 +1,156 @@
+<h2>{{EventName}}</h2>
+<h4>Total Questions: {{TotalQuestions}}</h4>
+{%if QuestionNumber == 0 %}
+<div class="alert alert-info">This event has no questions, why not <a href="new_question.php">add some?</a></div>
+{%elseif QuestionNumber < 50 %}
+<div class="alert alert-info">This event only has a few questions, why not <a href="new_question.php">add some?</a></div>
+{%endif%}
+
+{%if Status == 1 %}
+     <div class="alert alert-success" role="alert">
+				<span class="sr-only">Result:</span>
+				Correct!
+				</div>
+{%elseif Status == 2%}
+     <div class="alert alert-warning" role="alert">
+				<span class="sr-only">Result:</span>
+				Incorrect. Your Response was: {{Incorrect}}
+				</div>
+{%elseif Status == 3%}
+    <h3>The correct answer is: {{Incorrect}}</h3>
+{%endif%}
+
+    
+    
+
+    <div class="question">
+            {% if question.questionType == 4 or question.questionType == 2 %}
+            <br><br>
+                    {% if question.imageLocation %}
+                        <img src="{{question.imageLocation}}" max-width=300 max-height=300/><br/>
+                    {%endif%}
+                <div id="questions">
+                     <form method="POST" action="">
+                     {{question.Question|striptags('<input>')|raw}}
+                    <input type=hidden name=type value="{{question.questionType}}"/>
+                    <input type=hidden name=idval value="{{question.idQuestions}}"/>
+                    <input type=hidden name=attempts value="{{Attempts}}"/>
+                    <br>
+                    <br/>
+					
+            {%else%}
+               {% if question.imageLocation %}
+                    <img src="{{question.imageLocation}}" max-width=300 max-height=300/><br/>
+                {%endif%}
+                <div id="questions"><br/>
+              <br/>{{question.Question}}
+                    <form method="POST" class="form-horizontal" action="">
+                     <input type=hidden name=type value="{{question.questionType}}"/>
+                    <input type=hidden name=idval value="{{question.idQuestions}}"/>
+                    <input type=hidden name=attempts value="{{Attempts}}"/>
+					<div class="controls">
+                    {%for i in range(1,5)%}
+                         {%if i ==1%}
+                              {%if question.optionA%}
+								<div class="radio">
+                                   <label><input type="radio" value="{{i}}" name="response"/>{{question.optionA}}</label>
+								</div>
+							  {%endif%}
+                        {%endif%}
+                        {%if i ==2%}
+                              {%if question.optionB%}
+								<div class="radio">
+                                   <label><input type="radio" value="{{i}}" name="response"/>{{question.optionB}}</label>
+								</div>
+                              {%endif%}
+                        {%endif%}
+                        {%if i ==3%}
+                               {%if question.optionC%}
+								<div class="radio">
+                                   <label><input type="radio" value="{{i}}" name="response"/>{{question.optionC}}</label>
+								</div>
+                              {%endif%}
+                        {%endif%}
+						{%if i ==4%}
+                              {%if question.optionD%}
+								<div class="radio">
+                                   <label><input type="radio" value="{{i}}" name="response"/>{{question.optionD}}</label>
+								</div>
+                              {%endif%}
+                        {%endif%}
+                        {%if i ==5%}
+                              {%if question.optionE%}
+								<div class="radio">
+                                   <label><input type="radio" value="{{i}}" name="response"/>{{question.optionE}}</label>
+								</div>
+                              {%endif%}
+                        {%endif%}
+                    {%endfor%}
+					</div>
+                    <br/>
+					
+               {%endif%}   
+			   
+			   <div class="alert alert-danger collapse" id="unanswered" role="alert">
+				<span class="sr-only">Error:</span>
+				Please select an answer. 
+				</div>
+			   {%if Status != 3%}
+					<input type="Submit" id="check" value="Check Answer" name="check" class="btn btn-success">
+			   {%endif%}
+			   {%if Status == 2 %}
+			   <input type="Submit" value="Give Up" name="giveUp" class="btn btn-info">
+			   {%endif%} 
+			</div><br>
+ 
+<form method="POST" action="">
+    <input type="submit" value="Next Question" name="newQuestion" class="btn btn-primary"/>
+</form>
+
+</div> 
+
+<hr> 
+
+<button id="reportQuestion" class="btn">Report Question</button>
+    <div id="reportForm" style="display:none">
+        <h2>Report this Question</h2><br/>
+            Report this question for inaccuracies or other issues. Please be as specific as possible. 
+            <form id="report" method="POST" action="">
+            <input type="hidden" name="Qid" value="{{question.idQuestions}}"/>
+            <textarea name="reportText" class="question_id" id="stylized"></textarea><br/>
+            <input type="submit" value="Submit Report" name="report"/>
+        </form>
+    </div>
+
+    <script>
+       $("#reportQuestion").click(function () {
+            $header = $(this);
+            //getting the next element
+            $content = $("#reportForm");
+            //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+            $content.slideToggle(500, function () {});
+
+        });
+
+       $("#report").submit(function(e) {
+            if ($.trim($('#stylized').val()).length < 1) {
+                if (!confirm("Are you sure you want to submit a report with no details?")) {
+                    e.preventDefault();
+                }
+            }
+        });
+	   $("#check").click(function(e) {
+			{% if question.questionType == 4 or question.questionType == 2 %}
+			if ($.trim($('#response').val()).length < 1) {
+				$('#unanswered').show();
+                e.preventDefault();
+            }
+			{%else%}
+			if (!$("input:radio[name='response']").is(":checked"))
+            if ($.trim($('#stylized').val()).length < 1) {
+				$('#unanswered').show();
+                e.preventDefault();
+            }
+			{%endif%}
+        });
+    </script>

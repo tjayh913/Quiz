@@ -1,0 +1,132 @@
+<div>
+<h2>Approve Questions:</h2>
+        <h3>Question:</h3>
+{%for question in ApprovalArray%}
+                <form method="post" action=""><input type="hidden" value='{{question.idQuestions}}' name="Changequest"/>
+                Event Name: <select name="realEvent">
+                    {%for event in EventList%}
+                        {%if event.id == question.eventid %}
+                          <option value="{{event.id}}" selected=selected>{{event.Event}}</option>
+                        {%else%}
+                           <option value="{{event.id}}">{{event.Event}}</option>
+                           {%endif%}
+                    {%endfor%}
+                </select><input type="submit" name="changeEvent"/>
+            </form>
+                {{question.username}}
+<form method="post" action="">
+
+            {% if question.questionType == 4 or question.questionType == 2 %}
+                 {% if question.imageLocation %}
+                         <img src="{{question.imageLocation}}" max-width=300 max-height=300/><br/>
+                {%endif%}
+                      <div id="questions">{{question.Question|striptags('<input>')|raw}}<br/>
+                      Keywords:{{question.KeyWords}}
+                 <input type="hidden" value='{{question.eventid}}' name="eventId"/>
+                  <input type="hidden" value="{{question.idQuestions}}" name="questionId" />
+                <label>Approve <input type="radio" name="approval" value ="approve"/></label><br/>
+                <label>Reject <input type="radio" name="approval" value="reject"/></label><br/>
+            {%else%}
+               {% if question.imageLocation %}
+                    <img src="{{question.imageLocation}}" max-width=300 max-height=300/><br/>
+                {%endif%}
+                <input type="hidden" value='{{question.eventid}}' name="eventId"/>
+                <input type="hidden" value="{{question.idQuestions}}" name="questionId" />
+                {{question.Question|striptags('<input>')|raw}}<br/>
+                1.{{question.optionA}}<br/>
+                2.{{question.optionB}}<br/>
+                3.{{question.optionC}}<br/>
+                4.{{question.optionD}}<br/>
+                5.{{question.optionE}}<br/>
+                <div>Correct: {{question.correctResponse}}</div>
+                <label>Approve <input type="radio" name="approval" value ="approve"/></label><br/>
+                <label>Reject <input type="radio" name="approval" value="reject"/></label><br/>
+           {%endif%}
+           <br/><input type="Submit" value="Submit" name="questionSubmission"/>
+           <a href="http://scioly.org/phpBB3/ucp.php?i=pm&mode=compose&u={{question.userID}}">PM User</a>
+           </form>
+           <hr>
+{%endfor%}
+</div>
+<div>
+<div><h2>Open Reports:</h2></div>
+{%for reports in ReportArray %}
+                <div id="questions">
+                        <div>Report: {{reports.Report}}</div>
+                        <div>User: {{reports.user}}</div>
+                        <div>Id: {{reports.idQuestions}}</div>
+                {%if reports.questionType ==4  or  reports.questionType ==2%}
+                    {%if reports.questionType ==4 %}
+                       <img src="{{reports.imageLocation}}" max-width=300 max-height=300/><br/>
+                    {%endif%}
+
+                     <form method="POST" action="">
+                        <textarea name="textChange" id="stylized">{{reports.Question}}</textarea><br/>
+                                      
+                      <input type=hidden name=idval value="{{reports.idQuestions}}"/>
+                      <input type="text" name="keywords" value={{reports.KeyWords}}/>
+                     <input type="Submit" value="Update Question" name="updateFRQ">
+                     <input type="submit" value="Close Report" name="close"/>
+                                 <input type="submit" value="Delete Question" name="delete"/>
+                </div>
+                
+                {%else%}
+                     {%if reports.questionType == 3 %}
+                        <img src="{{reports.imageLocation}}" max-width=300 max-height=300/><br/>
+                    {%endif%}
+                    <div id="questions">
+                    <form method="POST" action="">
+                    <textarea name="textChange" id="stylized">{{reports.Question}}</textarea><br/>
+                    <input type=hidden name=idval value="{{reports.idQuestions}}"/>
+                    {%for i in range(1,5)%}
+                        {%if i ==1%}
+                            <input type="text" value="{{reports.optionA}}" name="response{{i}}"/><br/>
+                        {%endif%}
+                        {%if i ==2%}
+                            <input type="text" value="{{reports.optionB}}" name="response{{i}}"/><br/>
+                        {%endif%}
+                        {%if i ==3%}
+                           <input type="text" value="{{reports.optionC}}" name="response{{i}}"/><br/>
+                        {%endif%}
+                        {%if i ==4%}
+                            <input type="text" value="{{reports.optionD}}" name="response{{i}}"/><br/>
+                        {%endif%}
+                        {%if i ==5%}
+                            <input type="text" value="{{reports.optionE}}" name="response{{i}}"/><br/>
+                        {%endif%}
+                    {%endfor%}  
+                    
+                   <div>Correct is: {{reports.correctResponse}}</div>
+                Correct Should be:<select name="correct_answer">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select><br/>
+                <input type="Submit" value="Update Question" name="update"></form>
+                    <form method="post" action="">
+                 <input type=hidden name=idval value="{{reports.idQuestions}}"/>
+                    <input type="submit" value="Close Report" name="close"/>
+                    <input type="submit" value="Delete Question" name="delete"/>
+                {%endif%}
+                    </form>
+                    </div>
+                    <hr>
+{%endfor%}
+</div>
+<div><h2>Reset Event Numbering</h2></div>
+<div>Use this to fix multiple questions showing up on a single event</div>
+<form method="POST" action="" class="inline-form">
+<select name="event">
+     {%for event in EventList%}
+        <option value="{{event.id}}">{{event.Event}}</option>           
+    {%endfor%}
+</select>
+<input type="submit" class="btn btn-warning" name="resetNumbering" value="Fix Event"/>
+</form>
+<br>
+<hr>
+<form method="POST" action="">
+                <input type="submit" value="resetAll" name="fixall"/>
+</form>

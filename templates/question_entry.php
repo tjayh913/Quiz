@@ -1,9 +1,8 @@
 
-<div id="centered">
-    <form method="" action="">
+    <!--<form method="" action="">
         <label>Multiple Choice <input type="checkbox" value="MC" name="MC"/></label>
         <label>Free Response: <input type="checkbox" value="FRQ" name="FRQ"/></label>
-    </form>
+    </form>-->
     <div id="MC">
     <h2>Add a Multiple Choice Question:</h2>
     <form enctype="multipart/form-data" action="" method="POST">
@@ -14,12 +13,11 @@
             echo $Forms->return_event_select();   
         ?>
     </select><br/>
-                <input type="hidden" name="MAX_FILE_SIZE" value="512000" />
-        Upload Image: <input name="userfile" type="file" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="512000" /><Br/>
+        Upload Image: <input name="userfile" type="file" /><Br/>
+        Upload Image from URL: <input name="URL" type="text" /><Br/>
             Question:<Br/>
-              <textarea name="inputquest" class="question_id">
-                
-            </textarea><br/>
+              <textarea name="inputquest" class="question_id" id="stylized"></textarea><br/>
     Answer Choices:<br/>
     1.<input type="text" name="option1"/><br/>
     2.<input type="text" name="option2"/><br/>
@@ -34,11 +32,32 @@
         <option value="4">4</option>
         <option value="5">5</option>
     </select><br/>
-    
+    <br/>
     <input type="submit" value="Submit Question" name="MCQuestion"/>
     </form>
     </div>
-
+<br/><br/>
+ <h2>Add a Fill in the Blank Question:</h2>
+<div id="frq">
+    <form enctype="multipart/form-data" action="" method="POST">
+    Event:
+    <select name="event">
+        <?php
+            $Forms = new Forms;
+            echo $Forms->return_event_select();   
+        ?>
+    </select><br/>
+                <input type="hidden" name="MAX_FILE_SIZE" value="512000" /><Br/>
+        Upload Image: <input name="userfile" type="file" /><Br/>
+        Upload Image from URL: <input name="URL" type="text" /><Br/>
+            Question:(use !# to designate where the blank should be)<Br/>
+              <textarea name="inputquest" class="question_id" id="stylized"></textarea><br/>
+    Keywords that constitute a response, separated by a comma:<input type="text" name="keywords"/><br/>
+    <br/>
+    <input type="submit" value="Submit Question" name="FRQuestion"/>
+    </form>
+    
+</div>
 </div>
 <!--
 <div id="FRQ">

@@ -1,6 +1,35 @@
 #centered{
     margin-right: auto;
     margin-left: auto;
-    width: 25%;
+    width: 80%;
     padding: 20px;
+}
+#container{
+    margin-left:20%;
+}
+#leaderboards{
+    font-size: 20px;
+}
+#questions{
+    font-size: 16px;
+    /*padding-top:3%;*/
+}
+textarea#stylized {
+	width: 600px;
+	height: 120px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+        }
+.red{
+    color:#FF0000;
+}
+.green{
+    color:#00FF00;
+}
+.scroll_container {
+    border:2px solid #ccc;
+    /*width:300px;*/
+    height: 300px;
+    overflow-y: scroll;
 }
